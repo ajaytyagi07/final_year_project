@@ -11,7 +11,7 @@ router.get('/api/questions/', async (req, res) => {
 
 
   const { subject } = req.query;
-  // console.log(subject);
+  console.log(subject);
 
   try {
     // Fetch 1 MCQ question
