@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE `Question` ADD COLUMN `subject` ENUM('DSA', 'OS', 'COMPUTER NETWORK', 'DBMS') NOT NULL;
+ALTER TABLE `Question` ADD COLUMN `subject` ENUM('physics', 'chemistry', 'biology', 'gk') NOT NULL;

@@ -66,10 +66,7 @@ const Login = () => {
 
                 if (response.data.success) {
                     alert('Login successful!');
-                    navigate('/dashboard'); // Redirect to the dashboard after successful login
-                } else {
-                    alert('Face not recognized. Redirecting to registration.');
-                    navigate('/register'); // Redirect to registration page if face is not recognized
+                    navigate('/subjects'); // Redirect to the dashboard after successful login
                 }
             } else {
                 alert('No face detected. Please ensure your face is visible and try again.');
@@ -121,7 +118,7 @@ const Login = () => {
             <button onClick={handleFaceLogin} className={styles.loginButton}>
                 Login
             </button>
-            <Link to='/signup'>Register here ...</Link>
+            <Link to='/signup' className={styles.registerLink}>Don't have an account! Signup Now ...</Link>
         </div>
     );
 };

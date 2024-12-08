@@ -107,9 +107,10 @@ const Signup = () => {
                 )}
             </div>
             <button onClick={handleSignup} className={styles.registerButton}>
-                Register with Face
+                Signup
+
             </button>
-            <Link to='/login'>Click here if Already registered..</Link>
+            <Link to='/login' className={styles.loginLink}>Click here if Already registered..</Link>
         </div>
     );
 };

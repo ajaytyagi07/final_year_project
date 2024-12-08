@@ -34,8 +34,8 @@ enum QuestionType {
 }
 
 enum subjectType{
-  DSA
-  OS
-  COMPUTER NETWORK
-  DBMS
+  physics
+  chemistry
+  biology
+  gk
 }
