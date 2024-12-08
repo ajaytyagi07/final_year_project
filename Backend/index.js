@@ -9,18 +9,24 @@ app.use(bodyParser.json());
 
 const cors = require('cors');
 
-app.use(cors());
-
+app.use(cors({
+  origin: 'http://localhost:5173',
+}));
 
 
 app.get('/', (req, res) => {
-  
+
   res.send("server working");
 });
 
 
 const questionroute = require('./Routes/questionRoutes');
+// const login = require('./Routes/login');
+// const register = require('./Routes/register')
 app.use(questionroute);
+// app.use(login);
+// app.use(register);
+
 
 
 // Start the server
