@@ -14,7 +14,7 @@ const Quizform = ({ subject }) => {
     // Fetch questions when the component loads
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get(`https://quizzzapi.vercel.app/api/questions?subject=${subject}`);
+        const response = await axios.get(`http://localhost:5000/api/questions?subject=${subject}`);
         setQuestions(response.data);
       } catch (error) {
         console.error('Error fetching questions:', error);
@@ -36,7 +36,7 @@ const Quizform = ({ subject }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://quizzzapi.vercel.app/api/submit-answers', {
+      const response = await axios.post('http://localhost:5000/api/submit-answers', {
         answers: Object.entries(answers).map(([question_id, user_answer]) => ({
           question_id,
           user_answer,
