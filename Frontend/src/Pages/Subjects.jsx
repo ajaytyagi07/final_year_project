@@ -3,10 +3,10 @@ import './Subjects.css'; // Importing the CSS for styling
 import { useNavigate } from 'react-router-dom';
 
 const subjects = [
-  { name: 'DSA', color: '#ff5722', imageUrl: 'https://data-flair.training/blogs/wp-content/uploads/sites/2/2021/10/data-structure-quiz.webp', redirect: 'test/physicstest' },
-  { name: 'OS', color: '#4caf50', imageUrl: 'https://data-flair.training/blogs/wp-content/uploads/sites/2/2022/02/operating-system-quiz.webp', redirect: 'test/chemistrytest' },
-  { name: 'COMPUTER NETWORK', color: '#2196f3', imageUrl: 'https://data-flair.training/blogs/wp-content/uploads/sites/2/2022/02/computer-network-quiz-questions-with-answers.webp', redirect: 'test/biologytest' },
-  { name: 'DBMS', color: '#ffeb3b', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhzZtCK53kW3YGZiiBVqfMeO-1Nag9AmRdDzvfsW5_1ZhB43X6_Rx7SD1Dfjoj5_A1VxD2KCYftNRG1A5b9GQCY_GX9tnJLsSu0S3Wd9RpOpp-GR0KbsPrSddyH62Ef_DdR6jqCYkj4rrda8gbeTk_w5CDp9dA5_LAQDd-TPG78UDo95fCVq1g6ULi3/s1600-rw/database%20quiz%20set%2013.jpg', redirect: 'test/gktest' }
+  { name: 'Physics', color: '#9CD7D1', imageUrl: 'https://blogassets.leverageedu.com/blog/wp-content/uploads/2020/05/21144359/Physics-Quiz.jpg', redirect: 'test/physicstest' },
+  { name: 'Chemistry', color: '#195D7D', imageUrl: 'https://englishpluspodcast.com/wp-content/uploads/2024/01/Basic-Chemistry-Quiz.jpg', redirect: 'test/chemistrytest' },
+  { name: 'Biology', color: '#69BA60', imageUrl: 'https://cdn6.aptoide.com/imgs/8/a/3/8a390031ef3d156aa80e995fe58f10ff_fgraphic.png', redirect: 'test/biologytest' },
+  { name: 'Gk', color: '#B7B5DA', imageUrl: 'https://akm-img-a-in.tosshub.com/aajtak/images/story/202207/gk_quiz-sixteen_nine.png', redirect: 'test/gktest' }
 ];
 
 const Subjects = () => {
