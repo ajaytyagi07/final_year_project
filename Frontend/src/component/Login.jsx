@@ -1,35 +1,29 @@
 import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
-import * as faceapi from 'face-api.js';
-import { Link, useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
+import * as faceapi from 'face-api.js';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const videoRef = useRef();
+    const navigate = useNavigate();
     const [isModelLoaded, setIsModelLoaded] = useState(false);
-    const navigate = useNavigate(); // For navigation to other routes
-    const streamRef = useRef(null); // Store the stream reference for cleanup
 
-    // Load face recognition models
-    const loadModels = async () => {
-        try {
+    useEffect(() => {
+        const loadModels = async () => {
             await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
             await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
             await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
             setIsModelLoaded(true);
             startVideo();
-        } catch (error) {
-            console.error('Error loading models:', error);
-            alert('Failed to load face recognition models.');
-        }
-    };
+        };
+        loadModels();
+    }, []);
 
-    // Start webcam
     const startVideo = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-            streamRef.current = stream; // Store the stream reference
             videoRef.current.srcObject = stream;
         } catch (error) {
             console.error('Error accessing webcam:', error);
@@ -37,88 +31,62 @@ const Login = () => {
         }
     };
 
-    // Stop webcam when the component is unmounted
-    const stopVideo = () => {
-        if (streamRef.current) {
-            const tracks = streamRef.current.getTracks();
-            tracks.forEach(track => track.stop()); // Stop all video tracks
-            streamRef.current = null; // Clear the reference after stopping the tracks
+    const handleLogin = async () => {
+        if (!email.trim()) {
+            alert('Please enter your email.');
+            return;
         }
-    };
 
-    // Handle Face Login
-    const handleFaceLogin = async () => {
         const videoElement = videoRef.current;
+        const detections = await faceapi.detectSingleFace(
+            videoElement,
+            new faceapi.TinyFaceDetectorOptions()
+        ).withFaceLandmarks().withFaceDescriptor();
 
-        try {
-            const detections = await faceapi.detectSingleFace(
-                videoElement,
-                new faceapi.TinyFaceDetectorOptions()
-            ).withFaceLandmarks().withFaceDescriptor();
+        if (detections) {
+            const faceDescriptor = Array.from(detections.descriptor);
 
-            if (detections) {
-                const faceDescriptor = detections.descriptor;
-
-                const response = await axios.post('http://localhost:5000/login', {
+            try {
+                const response = await axios.post('http://localhost:5000/api/login', {
                     email,
-                    descriptor: Array.from(faceDescriptor), // Send both email and face descriptor
+                    descriptor: JSON.stringify(faceDescriptor),
                 });
 
-                if (response.data.success) {
-                    alert('Login successful!');
-                    navigate('/subjects'); // Redirect to the dashboard after successful login
-                }
-            } else {
-                alert('No face detected. Please ensure your face is visible and try again.');
+                // Store token in local storage
+                localStorage.setItem('authToken', response.data.token);
+
+                // alert(response.data.message);
+                window.location.href="http://localhost:5173/subjects"
+                // redirect('/subjects'); // Redirect to home after login
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert(error.response?.data?.message || 'Error during login.');
             }
-        } catch (error) {
-            console.error('Error during face login:', error);
-            alert('Error during face login. Please try again.');
+        } else {
+            alert('No face detected. Please try again.');
         }
     };
-
-    useEffect(() => {
-        loadModels();
-
-        // Cleanup: stop video stream when the component is unmounted
-        return () => {
-            stopVideo();
-        };
-    }, []);
 
     return (
         <div className={styles.container}>
             <h2 className={styles.title}>Login</h2>
-            <div className={styles.inputContainer}>
-                <h3>Enter your Email</h3>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={styles.inputField}
-                />
-            </div>
-
-            <div className={styles.faceLoginContainer}>
-                <h3>Capture Face</h3>
-                {isModelLoaded ? (
-                    <div>
-                        <video
-                            ref={videoRef}
-                            autoPlay
-                            muted
-                            className={styles.video}
-                        />
-                    </div>
+            <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={styles.inputField}
+            />
+            <div className={styles.faceCaptureContainer}>
+                <h3>Face Authentication</h3>
+                {!isModelLoaded ? (
+                    <p>Loading face recognition models...</p>
                 ) : (
-                    <p className={styles.loadingText}>Loading face recognition...</p>
+                    <video ref={videoRef} autoPlay muted className={styles.video} />
                 )}
             </div>
-            <button onClick={handleFaceLogin} className={styles.loginButton}>
-                Login
-            </button>
-            <Link to='/signup' className={styles.registerLink}>Don't have an account! Signup Now ...</Link>
+            <button onClick={handleLogin} className={styles.loginButton}>Login</button>
+            <Link to="/signup" className={styles.signupLink}>New user? Signup here</Link>
         </div>
     );
 };

@@ -29,3 +29,12 @@ enum Question_subject {
   biology
   GK
 }
+
+
+model User {
+  id             String @id @default(uuid())
+  email          String @unique
+  faceDescriptor String  
+}
+
+

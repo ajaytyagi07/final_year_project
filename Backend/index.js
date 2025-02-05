@@ -19,11 +19,11 @@ app.get('/', (req, res) => {
 
 
 const questionroute = require('./Routes/questionRoutes');
-// const login = require('./Routes/loginRoutes');
-// const register = require('./Routes/registerRoutes')
+const login = require('./Routes/loginRoutes');
+const register = require('./Routes/registerRoutes')
 app.use(questionroute);
-// app.use(login);
-// app.use(register);
+app.use(login);
+app.use(register);
 
 
 

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
-import styles from './Signup.module.css'
+import styles from './Signup.module.css';
 import * as faceapi from 'face-api.js';
 import { Link } from 'react-router-dom';
 
@@ -9,26 +9,33 @@ const Signup = () => {
     const videoRef = useRef();
     const [isModelLoaded, setIsModelLoaded] = useState(false);
     const [isFaceDetected, setIsFaceDetected] = useState(false);
-    const [loading, setLoading] = useState(true); // Loading state for better UX
+    const [loading, setLoading] = useState(true);
 
     // Load face recognition models
-    const loadModels = async () => {
-        try {
-            await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-            await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-            await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
-            setIsModelLoaded(true);
-            setLoading(false); // Models loaded, stop showing the loading spinner
-            startVideo();
-        } catch (error) {
-            console.error('Error loading models:', error);
-            setLoading(false);
-            alert('Failed to load face recognition models.');
-        }
-    };
+    useEffect(() => {
+        const loadModels = async () => {
+            try {
+                await Promise.all([
+                    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+                    faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+                    faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+                ]);
+                setIsModelLoaded(true);
+                setLoading(false);
+                startVideo();
+            } catch (error) {
+                console.error('Error loading models:', error);
+                setLoading(false);
+                alert('Failed to load face recognition models.');
+            }
+        };
 
-    // Start webcam
+        loadModels();
+    }, []);
+
+    // Start webcam when models are loaded
     const startVideo = async () => {
+        if (!isModelLoaded) return;
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
             videoRef.current.srcObject = stream;
@@ -40,37 +47,37 @@ const Signup = () => {
 
     // Handle Signup
     const handleSignup = async () => {
-        const videoElement = videoRef.current;
+        if (!email.trim()) {
+            alert('Please enter your email.');
+            return;
+        }
 
+        const videoElement = videoRef.current;
         const detections = await faceapi.detectSingleFace(
             videoElement,
             new faceapi.TinyFaceDetectorOptions()
         ).withFaceLandmarks().withFaceDescriptor();
 
         if (detections) {
-            const faceDescriptor = detections.descriptor;
-            setIsFaceDetected(true); // Face detected successfully
+            const faceDescriptor = Array.from(detections.descriptor); // Convert to an array
+            setIsFaceDetected(true);
 
             try {
-                const response = await axios.post('http://localhost:5000/register', {
+                const response = await axios.post('http://localhost:5000/api/register', {
                     email,
-                    descriptor: Array.from(faceDescriptor), // Convert face descriptor to array
+                    descriptor: JSON.stringify(faceDescriptor), // Convert descriptor to JSON string
                 });
 
                 alert(response.data.message);
             } catch (error) {
                 console.error('Error during signup:', error);
-                alert('Error during signup.');
+                alert(error.response?.data?.message || 'Error during signup.');
             }
         } else {
-            setIsFaceDetected(false); // No face detected
+            setIsFaceDetected(false);
             alert('No face detected. Please try again.');
         }
     };
-
-    useEffect(() => {
-        loadModels();
-    }, []);
 
     return (
         <div className={styles.container}>
@@ -89,28 +96,23 @@ const Signup = () => {
                 {loading ? (
                     <div>
                         <p className={styles.loadingText}>Loading face recognition model...</p>
-                        <div className={styles.spinner}></div> {/* Spinner for loading */}
+                        <div className={styles.spinner}></div>
                     </div>
                 ) : !isModelLoaded ? (
                     <p>Failed to load face recognition models.</p>
                 ) : (
                     <div>
-                        <video
-                            ref={videoRef}
-                            autoPlay
-                            muted
-                            className={styles.video}
-                        />
-
+                        <video ref={videoRef} autoPlay muted className={styles.video} />
                         {!isFaceDetected && <p>Please ensure your face is clearly visible.</p>}
                     </div>
                 )}
             </div>
             <button onClick={handleSignup} className={styles.registerButton}>
                 Signup
-
             </button>
-            <Link to='/login' className={styles.loginLink}>Click here if Already registered..</Link>
+            <Link to="/login" className={styles.loginLink}>
+                Click here if already registered
+            </Link>
         </div>
     );
 };

@@ -1,38 +1,49 @@
 const express = require('express');
 const router = express.Router();
-const faceapi = require('@tensorflow-models/face-api'); // For Euclidean distance
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const jwt = require('jsonwebtoken');
 
+const SECRET_KEY = 'your_secret_key'; // Use a strong secret key
+
+// User Login Route
 router.post('/api/login', async (req, res) => {
-    const { descriptor } = req.body;
+    const { email, descriptor } = req.body;
 
-    // Validate the descriptor
-    if (!descriptor || !Array.isArray(descriptor)) {
-        return res.status(400).json({ message: 'Invalid or missing descriptor' });
+    if (!email || !descriptor) {
+        return res.status(400).json({ message: 'Email and face descriptor are required' });
     }
 
-    const inputDescriptor = new Float32Array(descriptor);
-
     try {
-        // Fetch all users and their face descriptors
-        const users = await prisma.user.findMany({
-            select: { id: true, email: true, faceDescriptor: true }, // Select only required fields
-        });
+        // Find the user by email
+        const user = await prisma.user.findUnique({ where: { email } });
 
-        for (const user of users) {
-            const savedDescriptor = new Float32Array(JSON.parse(user.faceDescriptor)); // Convert back to Float32Array
-            const distance = faceapi.euclideanDistance(inputDescriptor, savedDescriptor);
-
-            if (distance < 0.6) { // Adjust the threshold as needed
-                return res.json({ success: true, message: 'Login successful', user });
-            }
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
         }
 
-        res.status(401).json({ success: false, message: 'Face not recognized' });
+        // Convert stored descriptor and compare with detected descriptor
+        const storedDescriptor = JSON.parse(user.faceDescriptor);
+        const inputDescriptor = JSON.parse(descriptor);
+
+        // Calculate similarity score (Euclidean distance)
+        const distance = Math.sqrt(storedDescriptor.reduce((sum, value, index) => 
+            sum + Math.pow(value - inputDescriptor[index], 2), 0));
+
+        // Define a threshold (adjust based on testing)
+        const threshold = 0.5; 
+
+        if (distance > threshold) {
+            return res.status(401).json({ message: 'Face mismatch. Authentication failed.' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ userId: user.id, email: user.email }, SECRET_KEY, { expiresIn: '7d' });
+
+        res.status(200).json({ message: 'Login successful', token, user });
     } catch (error) {
-        console.error('Error during face login:', error);
-        res.status(500).json({ message: 'Error during face login' });
+        console.error('Error during login:', error);
+        res.status(500).json({ message: 'Error during login' });
     }
 });
 

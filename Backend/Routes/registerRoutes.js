@@ -7,23 +7,20 @@ const prisma = new PrismaClient();
 router.post('/api/register', async (req, res) => {
     const { email, descriptor } = req.body;
 
-    // Basic validation
     if (!email || !descriptor) {
         return res.status(400).json({ message: 'Email and face descriptor are required' });
     }
 
     try {
-        // Check if the user already exists
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Save the new user with the face descriptor
         const user = await prisma.user.create({
             data: {
                 email,
-                faceDescriptor: descriptor, // Assuming `faceDescriptor` is in your Prisma schema
+                faceDescriptor: descriptor, // Save descriptor as JSON string
             },
         });
 
@@ -33,5 +30,6 @@ router.post('/api/register', async (req, res) => {
         res.status(500).json({ message: 'Error registering user' });
     }
 });
+
 
 module.exports = router;
