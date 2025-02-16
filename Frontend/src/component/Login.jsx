@@ -2,12 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './Login.module.css';
 import * as faceapi from 'face-api.js';
-import { Link, redirect, useNavigate } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const videoRef = useRef();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [isModelLoaded, setIsModelLoaded] = useState(false);
 
     useEffect(() => {
@@ -60,7 +60,7 @@ const Login = () => {
                 // redirect('/subjects'); // Redirect to home after login
             } catch (error) {
                 console.error('Error during login:', error);
-                alert(error.response?.data?.message || 'Error during login.');
+                alert(error.response?.data?.message || error);
             }
         } else {
             alert('No face detected. Please try again.');

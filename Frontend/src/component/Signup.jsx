@@ -22,7 +22,7 @@ const Signup = () => {
                 ]);
                 setIsModelLoaded(true);
                 setLoading(false);
-                startVideo();
+                // startVideo();
             } catch (error) {
                 console.error('Error loading models:', error);
                 setLoading(false);
@@ -33,6 +33,12 @@ const Signup = () => {
         loadModels();
     }, []);
 
+    useEffect(()=>{
+        if(isModelLoaded)
+            startVideo();
+
+    } ,[isModelLoaded])
+    
     // Start webcam when models are loaded
     const startVideo = async () => {
         if (!isModelLoaded) return;
