@@ -7,6 +7,8 @@ import Navbar from './component/Navbar';
 import Subjects from './Pages/Subjects';
 import Login from './component/Login';
 import Signup from './component/Signup';
+import About from './Pages/ComparativeAnalysis';
+import Submit from './Pages/DisqualifiedPage'
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
         <Route path="/subjects/test/biologytest" element={<Quizform subject="biology" />} />
         <Route path="/subjects/test/gktest" element={<Quizform subject="GK" />} />
         <Route path="/results" element={<ResultsPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/disqualified" element={<Submit />} />
       </Routes>
     </Router>
   );

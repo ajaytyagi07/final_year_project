@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './Login.module.css';
 import * as faceapi from 'face-api.js';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -56,7 +56,7 @@ const Login = () => {
                 localStorage.setItem('authToken', response.data.token);
 
                 // alert(response.data.message);
-                window.location.href="http://localhost:5173/subjects"
+                window.location.href = "http://localhost:5173/subjects"
                 // redirect('/subjects'); // Redirect to home after login
             } catch (error) {
                 console.error('Error during login:', error);
