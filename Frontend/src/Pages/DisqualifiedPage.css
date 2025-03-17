@@ -1,0 +1,28 @@
+/* DisqualifiedPage.css */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    background-color: #f8f9fa;
+}
+
+.content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #d9534f;
+}
+
+.message {
+    margin-top: 10px;
+    color: #333;
+    font-size: 1.2rem;
+}

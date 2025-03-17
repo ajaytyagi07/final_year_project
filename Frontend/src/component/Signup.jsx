@@ -33,12 +33,12 @@ const Signup = () => {
         loadModels();
     }, []);
 
-    useEffect(()=>{
-        if(isModelLoaded)
+    useEffect(() => {
+        if (isModelLoaded)
             startVideo();
 
-    } ,[isModelLoaded])
-    
+    }, [isModelLoaded])
+
     // Start webcam when models are loaded
     const startVideo = async () => {
         if (!isModelLoaded) return;

@@ -1,73 +1,84 @@
 .result-container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-  }
-  
-  .result-title {
-    text-align: center;
-    color: #333;
-  }
-  
-  .score {
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .report-title {
-    margin-top: 20px;
-    font-size: 1.5em;
-    color: #555;
-  }
-  
-  .question-report {
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-  }
-  
-  .correct {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-  }
-  
-  .incorrect {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-  }
-  
-  .question-text,
-  .user-answer,
-  .correct-answer,
-  .status,
-  .grading-notes {
-    margin: 5px 0;
-  }
-  
-  .divider {
-    border: 0;
-    border-top: 1px solid #ddd;
-    margin: 10px 0;
-  }
-  
-  .back-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 1.2em;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
-  .back-button:hover {
-    background-color: #0056b3;
-  }
-  
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.result-title {
+  text-align: center;
+  color: #333;
+}
+
+.score {
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.report-title {
+  margin-top: 20px;
+  font-size: 1.5em;
+  color: #555;
+}
+
+.question-report {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+}
+
+.correct {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.incorrect {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.question-text,
+.user-answer,
+.correct-answer,
+.status,
+.grading-notes {
+  margin: 5px 0;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+/* Back Button Styling */
+.back-button {
+  display: inline-block;
+  width: auto;
+  padding: 12px 20px;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #0056b3, #003f80);
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 86, 179, 0.3);
+}
+
+.back-button:active {
+  transform: scale(0.98);
+}
