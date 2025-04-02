@@ -5,7 +5,7 @@ const ComparativeAnalysis = () => {
         { name: "KNN", accuracy: "65%", precision: "60%", recall: "55%", latency: "200 ms" },
         { name: "SVM", accuracy: "75%", precision: "72%", recall: "70%", latency: "180 ms" },
         { name: "OpenCV", accuracy: "85%", precision: "78%", recall: "78%", latency: "30 ms (Fastest)" },
-        { name: "TensorFlow", accuracy: "95%", precision: "93%", recall: "92%", latency: "70 ms" },
+        { name: "CNN", accuracy: "95%", precision: "93%", recall: "92%", latency: "70 ms" },
     ];
 
     const styles = {

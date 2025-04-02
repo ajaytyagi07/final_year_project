@@ -73,7 +73,7 @@ const Quizform = ({ subject }) => {
         setMultipleFaces(predictions.length > 1);
         setWarningCount(prevCount => {
           const newCount = prevCount + 1;
-          if (newCount >= 3) {
+          if (newCount >= 4) {
             stopProctoring();
             navigate('/disqualified');
           }
@@ -107,9 +107,17 @@ const Quizform = ({ subject }) => {
   };
 
   const preventTabSwitching = () => {
+    let tabSwitchWarningCount = 0;
+
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) {
-        alert("Tab switching is not allowed during the test!");
+        tabSwitchWarningCount++;
+        if (tabSwitchWarningCount >= 3) {
+          alert("You have been disqualified for switching tabs multiple times!");
+          navigate('/disqualified');
+        } else {
+          alert(`Tab switching is not allowed! Warning ${tabSwitchWarningCount}/3`);
+        }
       }
     });
   };
@@ -120,6 +128,7 @@ const Quizform = ({ subject }) => {
       if (e.ctrlKey && (e.key === "u" || e.key === "U")) e.preventDefault();
       if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) e.preventDefault();
       if (e.key === "F12") e.preventDefault();
+      if (e.ctrlKey && (e.key === "v" || e.key === "V")) e.preventDefault();
       if (e.ctrlKey && e.key === "Tab") e.preventDefault();
     });
   };
@@ -150,7 +159,7 @@ const Quizform = ({ subject }) => {
       />
       {(!faceDetected || multipleFaces) && (
         <p style={{ color: 'red', textAlign: 'center', fontWeight: 'bold' }}>
-          ⚠ {multipleFaces ? 'Multiple faces detected!' : 'Face not detected!'} Warning {warningCount}/3
+          ⚠ {multipleFaces ? 'Multiple faces detected!' : 'Face not detected!'} Warning {warningCount}/4
         </p>
       )}
       {questions.length === 0 ? (

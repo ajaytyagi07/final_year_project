@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/subjects/test/biologytest" element={<Quizform subject="biology" />} />
         <Route path="/subjects/test/gktest" element={<Quizform subject="GK" />} />
         <Route path="/results" element={<ResultsPage />} />
-        <Route path="/about" element={<About />} />
+        {/* <Route path="/about" element={<About />} /> */}
         <Route path="/disqualified" element={<Submit />} />
       </Routes>
     </Router>
